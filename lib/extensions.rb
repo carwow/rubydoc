@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'open-uri'
 require 'rubygems/package'
+require_relative 'source_cleaner'
 
 module YARD
   module Server
