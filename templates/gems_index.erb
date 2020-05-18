@@ -1,18 +1,11 @@
 <div id="content">
   <nav>
   <ul id="navigation">
-    <li><a href="/featured">Featured</a></li>
-    <li><a href="/stdlib">Stdlib</a></li>
-    <% if @search %>
-      <li><a href="/gems">RubyGems</a></li>
-    <% else %>
-      <li class="selected">RubyGems</li>
-    <% end %>
-    <li><a href="/github">GitHub</a></li>
+    <li class="selected">Gems</li>
     <li class="search"><form action="/find/gems" method="GET"><input type="text" id="docSearch" name="q" value="<%= h @search %>" placeholder="Search Gems"/></form></li>
   </ul>
   </nav>
-  <h2>RubyGems <%= h @search ? "Search Results for '#{@search}'" : 'Listing' %> <% if @search %><span class="small">(<a href="/<%= @adapter.router.docs_prefix %>">Back to Listing</a>)</span><% end %></h2>
+  <h2>Gems <%= h @search ? "Search Results for '#{@search}'" : 'Listing' %> <% if @search %><span class="small">(<a href="/">Back to Listing</a>)</span><% end %></h2>
 
   <%= erb :alpha_index %>
   <%= erb :pagination %>

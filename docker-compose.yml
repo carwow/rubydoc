@@ -1,7 +1,16 @@
 version: "3.7"
+
+networks:
+  default:
+    external:
+      name: carwow
+
 services:
   app:
+    container_name: rubydoc
     image: 127.0.0.1:5000/rubydoc-app
+    labels:
+      - carwow
     build:
       context: .
       dockerfile: ./docker/app/Dockerfile
@@ -11,29 +20,12 @@ services:
       - ./repos:/app/repos
       - ./data:/app/data
       - ./log:/app/log
-    ports:
-      - "80:8080"
-    deploy:
-      replicas: 1
-      update_config:
-        order: start-first
     depends_on:
       - docparse
+
   docparse:
     image: 127.0.0.1:5000/rubydoc-docparse
+    container_name: rubydoc-docparse
     build:
       context: ./docker/docparse
     entrypoint: sh -c "echo Docparse image is built. It is okay for this service to exit."
-    deploy:
-      replicas: 0
-      restart_policy:
-        condition: none
-  # cache:
-  #   image: 127.0.0.1:5000/rubydoc-cache
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/cache/Dockerfile
-  #   ports:
-  #     - "80:80"
-  #   depends_on:
-  #     - app
