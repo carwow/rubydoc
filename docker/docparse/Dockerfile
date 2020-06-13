@@ -3,7 +3,7 @@ FROM ruby:2.6-alpine
 ADD ./generate.rb /rb/generate.rb
 RUN chmod +x /rb/generate.rb
 
-RUN adduser -D app
+RUN adduser --uid 1000 --disabled-password app
 USER app
 ENV GEM_HOME /home/app/.gem/ruby/2.6.0
 RUN gem update --system --no-document

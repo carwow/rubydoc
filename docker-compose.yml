@@ -16,16 +16,15 @@ services:
       dockerfile: ./docker/app/Dockerfile
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./config:/app/config
-      - ./repos:/app/repos
-      - ./data:/app/data
-      - ./log:/app/log
-    depends_on:
-      - docparse
+      - .:/app
+    ports:
+      - "7890:8080"
+        # depends_on:
+        #  - docparse
 
-  docparse:
-    image: 127.0.0.1:5000/rubydoc-docparse
-    container_name: rubydoc-docparse
-    build:
-      context: ./docker/docparse
-    entrypoint: sh -c "echo Docparse image is built. It is okay for this service to exit."
+        # docparse:
+        #   image: 127.0.0.1:5000/rubydoc-docparse
+        #   container_name: rubydoc-docparse
+        #   build:
+        #     context: ./docker/docparse
+        #   entrypoint: sh -c "echo Docparse image is built. It is okay for this service to exit."
