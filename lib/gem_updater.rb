@@ -1,4 +1,3 @@
-require_relative 'cache'
 require_relative 'gem_store'
 require 'version_sorter'
 require 'rubygems'
@@ -23,11 +22,7 @@ class GemUpdater
 
   class << self
     def fetch_remote_gems
-      spec_fetcher = if $CONFIG.gem_source
-        Gem::SpecFetcher.new(Gem::SourceList.from([Gem::Source.new($CONFIG.gem_source)]))
-      else
-        Gem::SpecFetcher.fetcher
-      end
+      spec_fetcher = Gem::SpecFetcher.new(Gem::SourceList.from([Gem::Source.new($CONFIG.gem_source)]))
 
       libs = {}
       if Gem::VERSION < '2.0'
@@ -108,11 +103,6 @@ class GemUpdater
       index_map = {}
       changed_gems.keys.each do |gem_name|
         index_map[gem_name[0, 1]] = true
-      end
-      Cache.invalidate("/gems", *index_map.keys.map {|k| "/gems/~#{k}/" })
-
-      changed_gems.keys.each_slice(50) do |list|
-        Cache.invalidate(*list.map {|k| "/gems/#{k}" })
       end
     end
   end

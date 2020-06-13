@@ -9,25 +9,6 @@ end
 
 task :default => 'gems:update'
 
-namespace :server do
-  desc 'Start the server'
-  task :start => 'cache:clean_index' do
-    FileUtils.mkdir_p 'tmp/pids'
-    FileUtils.mkdir_p 'log'
-    exec "puma -C scripts/puma.rb"
-  end
-
-  desc 'Restart the server'
-  task :restart => 'cache:clean_index' do
-    sh "kill -USR1 `cat tmp/pids/server.pid`"
-  end
-
-  desc 'Shut down the server'
-  task :stop do
-    sh "kill -9 `cat tmp/pids/server.pid`"
-  end
-end
-
 namespace :gems do
   desc 'Update gem list from remote'
   task :update do
@@ -69,28 +50,5 @@ namespace :cache do
   task :clean_disk_repos do
     puts '>> Removing gem repositories'
     system 'rm -rf repos/gems/*'
-  end
-end
-
-namespace :stdlib do
-  desc 'Installs a standard library SOURCE=pathtolib VERSION=targetversion'
-  task :install do
-    raise 'Missing SOURCE path (SOURCE=pathtolib)' unless ENV['SOURCE']
-    raise 'Missing Ruby version (VERSION=targetversion)' unless ENV['VERSION']
-    require 'stdlib_installer'
-    StdlibInstaller.new(ENV['SOURCE'], ENV['VERSION']).install
-  end
-end
-
-namespace :docker do
-  desc 'Builds documentation for SOURCE in an isolated Docker container'
-  task :doc do
-    source_path = ENV['SOURCE']
-    host_path_file = File.join(__dir__, 'data', 'host_path')
-    if File.exist?(host_path_file)
-      source_path = source_path.sub(/\A\/app/, File.read(host_path_file).strip)
-    end
-
-    sh "docker run --rm -v #{source_path.inspect}:/build 127.0.0.1:5000/rubydoc-docparse"
   end
 end

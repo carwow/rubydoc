@@ -35,10 +35,6 @@ REMOTE_GEMS_FILE = __p('data', 'remote_gems.sqlite', :file)
 RECENT_SQL_FILE  = __p('data', 'recent.sqlite', :file)
 
 require_relative 'lib/helpers'
-require_relative 'lib/cache'
 require_relative 'lib/configuration'
 
 $CONFIG = Configuration.load
-# if ENV['DOCKERIZED'] && !$CONFIG.varnish_host
-#   $CONFIG.varnish_host = 'cache'
-# end

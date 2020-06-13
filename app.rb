@@ -15,6 +15,7 @@ require 'gem_store'
 require 'digest/sha2'
 require 'rack/etag'
 require 'version_sorter'
+require 'pry'
 
 class Hash; alias blank? empty? end
 class NilClass; def blank?; true end end
@@ -55,24 +56,6 @@ class DocServer < Sinatra::Base
     set :whitelisted_gems, []
     set :caching, false
     set :rubygems, ""
-
-    if $CONFIG.varnish_host
-      set :protection, :origin_whitelist => ["http://#{$CONFIG.varnish_host}"]
-    end
-
-    if $CONFIG.environment == 'profile'
-      require 'rack-mini-profiler'
-      require 'flamegraph'
-      require 'stackprof'
-      require 'memory_profiler'
-      Rack::MiniProfiler.config.enable_advanced_debugging_tools = true
-      use Rack::MiniProfiler
-    end
-
-    puts ">> Loading #{CONFIG_FILE}"
-    $CONFIG.each do |key, value|
-      set key, value
-    end
   end
 
   def self.load_gems_adapter
