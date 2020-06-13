@@ -5,7 +5,7 @@ module AppPreloader
   def self.preload!
     copy_static_files
     start_update_gems_timer
-    GC.compact
+    GC.compact if GC.respond_to?(:compact) # ruby >=2.7 only
   end
 
   def self.copy_static_files

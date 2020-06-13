@@ -1,0 +1,3 @@
+name: rubydoc.carwow.local
+url: https://rubydoc.carwow.local
+gem_source: <%= ENV.fetch("RUBYDOC_GEMSOURCE") %>

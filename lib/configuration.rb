@@ -1,6 +1,8 @@
 class Configuration < Hash
   def self.load
-    Configuration.new(YAML.load_file(CONFIG_FILE) || {})
+    Configuration.new(
+      YAML.load(ERB.new(File.read(CONFIG_FILE)).result)
+    )
   end
 
   def initialize(hash)

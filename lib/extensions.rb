@@ -59,7 +59,7 @@ module YARD
 
         # Remote gemfile from rubygems.org
         suffix = platform ? "-#{platform}" : ""
-        base_url = ($CONFIG.gem_source || 'http://rubygems.org').gsub(%r(/$), '')
+        base_url = $CONFIG.gem_source.gsub(%r(/$), '')
         url = "#{base_url}/gems/#{to_s(false)}#{suffix}.gem"
         puts "#{Time.now}: Downloading remote gem file #{url}"
 
@@ -114,15 +114,8 @@ module YARD
       private
 
       def generate_yardoc(safe_mode = false)
-        # This cannot be a block because YARD's LibraryCommand already wraps
-        # this inside of a chdir block.
-        #Dir.chdir(File.dirname(__FILE__) + "/..")
         Dir.chdir source_path
-
-        sh "ruby #{File.dirname(__FILE__) + "/../docker/docparse/generate.rb"}"
-
-        #sh "bundle exec rake docker:doc SOURCE=#{source_path.inspect}",
-        #  "Generating gem #{to_s}", false
+        sh "ruby #{File.dirname(__FILE__) + "/../generate.rb"}"
       end
 
       def expand_gem(io)
