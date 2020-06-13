@@ -159,10 +159,6 @@ class DocServer < Sinatra::Base
   # Always reset safe mode
   before { YARD::Config.options[:safe_mode] = true }
 
-  get '/healthcheck' do
-    "OK"
-  end
-
   # Indexes
 
   get '/' do
@@ -172,16 +168,16 @@ class DocServer < Sinatra::Base
   end
 
   get %r{/gems(?:/~([a-z]))?(?:/([0-9]+))?} do |letter, page|
-    @letter = letter || 'a'
+    @letter = letter
     @adapter = settings.gems_adapter
     @page = (page || 1).to_i
-    @max_pages = @adapter.libraries.pages_of_letter(@letter)
-    @libraries = @adapter.libraries.each_of_letter(@letter, @page)
+    @max_pages = @letter ? @adapter.libraries.pages_of_letter(@letter) : 1
+    @libraries = @adapter.libraries
+    @libraries = @libraries.each_of_letter(@letter, @page) if @letter
     cache erb(:gems_index)
   end
 
   DOC_PREFIXES.each do |prefix|
-    # gems
     get "#{prefix}/gems/:gemname/?*" do
       try_static_cache(prefix)
 
