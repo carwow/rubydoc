@@ -116,9 +116,13 @@ module YARD
       def generate_yardoc(safe_mode = false)
         # This cannot be a block because YARD's LibraryCommand already wraps
         # this inside of a chdir block.
-        Dir.chdir(File.dirname(__FILE__) + "/..")
-        sh "bundle exec rake docker:doc SOURCE=#{source_path.inspect}",
-          "Generating gem #{to_s}", false
+        #Dir.chdir(File.dirname(__FILE__) + "/..")
+        Dir.chdir source_path
+
+        sh "ruby #{File.dirname(__FILE__) + "/../docker/docparse/generate.rb"}"
+
+        #sh "bundle exec rake docker:doc SOURCE=#{source_path.inspect}",
+        #  "Generating gem #{to_s}", false
       end
 
       def expand_gem(io)
