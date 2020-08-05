@@ -30,7 +30,7 @@ class GemUpdater
           (libs[info[0]] ||= []) << GemVersion.new(*info)
         end
       else # RubyGems 2.x API
-        spec_fetcher.available_specs(:released).first.values.flatten(1).each do |tuple|
+        spec_fetcher.available_specs(:complete).first.values.flatten(1).each do |tuple|
           (libs[tuple.name] ||= []) << GemVersion.new(tuple.name, tuple.version, tuple.platform)
         end
       end
